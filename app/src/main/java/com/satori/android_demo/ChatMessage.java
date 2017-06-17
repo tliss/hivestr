@@ -11,6 +11,7 @@ public class ChatMessage {
     String text;
     String lat;
     String lon;
+    String tag;
 
     ChatMessage() {
     }
@@ -20,12 +21,13 @@ public class ChatMessage {
         this.text = text;
     }
 
-    ChatMessage(String user, String text, Location loc) {
+    ChatMessage(String user, String text, Location loc, String tag) {
         this.user = user;
         this.text = text;
         if(loc != null) {
             this.lat = Double.toString(loc.getLatitude());
             this.lon = Double.toString(loc.getLongitude());
         }
+        this.tag = tag;
     }
 }

@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
     private boolean mIsBound;
     private TextView mTextView;
     private MenuItem mClientConnectivityState;
+    private String newTag;
 
     Location mLocation;
     LocationManager mLocationManager;
@@ -137,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
                 if ((keyEvent != null && (keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
                     CharSequence text = textView.getText();
 
-                    ChatMessage message = new ChatMessage("anonymous", text.toString(), mLocation);
+                    ChatMessage message = new ChatMessage("anonymous", text.toString(), mLocation, newTag);
                     sendMessageToService(message);
                     textView.setText("");
                 }
@@ -207,7 +208,8 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Go",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(getApplicationContext(), "Sup", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getApplicationContext(), "Sup", Toast.LENGTH_SHORT).show();
+                            newTag = input.getText().toString();
                         }
                     }
             );
