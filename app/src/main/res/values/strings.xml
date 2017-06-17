@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Android Chat Tutorial</string>
+    <string name="action_settings">Settings</string>
+    <string name="satori_endpoint">YOUR_ENDPOINT</string>
+    <string name="satori_appkey">YOUR_APPKEY</string>
+    <string name="satori_message_channel_name">public_chat</string>
+    <string name="satori_presence_channel_name">public_chat.presence</string>
+</resources>
