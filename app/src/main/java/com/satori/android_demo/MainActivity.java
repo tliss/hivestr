@@ -3,6 +3,7 @@ package com.satori.android_demo;
 import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.icu.util.Calendar;
@@ -17,6 +18,7 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
@@ -28,6 +30,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -182,7 +185,34 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
         }
 
         if(id == R.id.add_hive){
-            Toast.makeText(getApplicationContext(), "Sup", Toast.LENGTH_SHORT).show();
+
+            AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+            alertDialog.setTitle("Join a Hive");
+            alertDialog.setMessage("Which hive would you like to join?");
+
+            final EditText input = new EditText(MainActivity.this);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT);
+            input.setLayoutParams(lp);
+            alertDialog.setView(input);
+
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Cancel",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }
+            );
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Go",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(getApplicationContext(), "Sup", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            );
+
+            alertDialog.show();
             return true;
         }
 
