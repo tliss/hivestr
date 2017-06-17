@@ -293,19 +293,6 @@ public class SatoriService extends Service {
         }
     }
 
-    static class ChatMessage {
-        String user;
-        String text;
-
-        ChatMessage() {
-        }
-
-        ChatMessage(String user, String text) {
-            this.user = user;
-            this.text = text;
-        }
-    }
-
     static class ChatPresence {
         String user;
 
@@ -341,8 +328,7 @@ public class SatoriService extends Service {
                     break;
                 case EVENT_SEND_TEXT:
                     String channelName = service.getString(R.string.satori_message_channel_name);
-                    String msgText = (String) event.obj;
-                    ChatMessage message = new ChatMessage(service.mUsername, msgText);
+                    ChatMessage message = (ChatMessage) event.obj;
                     service.mRtmClient.publish(channelName, message, Ack.NO);
                     break;
                 default:

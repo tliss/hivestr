@@ -1,5 +1,6 @@
 package com.satori.android_demo;
 
+import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -56,11 +57,8 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
 
         @Override
         public void onLocationChanged(final Location location) {
-            if(mLocation == null){
-                mLocation = location;
-                mLocationManager.removeUpdates(this);
-                mTextView.append(Html.fromHtml(mLocation.toString() + "<br/>"));
-            }
+            mLocation = location;
+            Log.i(TAG, "Location: "+location.toString());
         }
 
         @Override
@@ -135,24 +133,27 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 if ((keyEvent != null && (keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
                     CharSequence text = textView.getText();
-                    sendMessageToService(text.toString());
+
+                    ChatMessage message = new ChatMessage("anonymous", text.toString(), mLocation);
+                    sendMessageToService(message);
                     textView.setText("");
                 }
                 return false;
             }
         });
 
+        updateLocation();
+        doBindService();
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    private void updateLocation(){
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        Location location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if(location != null && location.getTime() > Calendar.getInstance().getTimeInMillis() - 2 * 60 * 1000) {
-            mLocation = location;
-        }
-        else {
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
-        }
+        mLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-        doBindService();
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, mLocationListener);
+
     }
 
     @Override
@@ -189,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
         return super.onOptionsItemSelected(item);
     }
 
-    private void sendMessageToService(String message) {
+    private void sendMessageToService(ChatMessage message) {
         if (mIsBound) {
             if (mService != null) {
                 try {
@@ -303,5 +304,7 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
                     super.handleMessage(event);
             }
         }
+
+
     }
 }
