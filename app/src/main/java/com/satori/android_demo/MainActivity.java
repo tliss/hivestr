@@ -4,7 +4,18 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.*;
+import android.icu.util.Calendar;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
@@ -34,8 +45,38 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTextView;
     private MenuItem mClientConnectivityState;
 
+    Location mLocation;
+    LocationManager mLocationManager;
+
+    private final LocationListener mLocationListener = new LocationListener() {
+
+        @Override
+        public void onLocationChanged(final Location location) {
+            if(mLocation == null){
+                mLocation = location;
+                mLocationManager.removeUpdates(this);
+                mTextView.append(Html.fromHtml(mLocation.toString() + "<br/>"));
+            }
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    };
     // Object to monitor the state of an application service
     private ServiceConnection mConnection = new ServiceConnection() {
+        @RequiresApi(api = Build.VERSION_CODES.N)
         public void onServiceConnected(ComponentName className, IBinder service) {
             Log.i(TAG, "Service connected.");
             mService = new Messenger(service);
@@ -48,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (RemoteException e) {
                 // In this case the service has crashed before we could even do anything with it
             }
+
         }
 
         public void onServiceDisconnected(ComponentName className) {
@@ -76,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +137,16 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        Location location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if(location != null && location.getTime() > Calendar.getInstance().getTimeInMillis() - 2 * 60 * 1000) {
+            mLocation = location;
+        }
+        else {
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
+        }
 
         doBindService();
     }
