@@ -21,10 +21,14 @@ import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 
@@ -36,7 +40,7 @@ import java.lang.ref.WeakReference;
  * and publishes chat message (using the SDK). When the SDK receives a new message from RTM, the
  * service notifies all bound activities about it.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnCreateContextMenuListener {
     private final String TAG = "MainActivity";
     private final Messenger mIncomingMessenger = new Messenger(new IncomingHandler(this));
     private boolean mInitialized = false;
@@ -175,6 +179,12 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+
+        if(id == R.id.add_hive){
+            Toast.makeText(getApplicationContext(), "Sup", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
 
         return super.onOptionsItemSelected(item);
     }
