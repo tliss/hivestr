@@ -43,12 +43,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="3dp"
+            android:layout_marginBottom="5dp"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:layout_gravity="center">
 
@@ -56,7 +56,8 @@
                     android:layout_width="90dp"
                     android:layout_height="match_parent"
                     android:text="Buzzin' hives in your area:"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:gravity="center"/>
 
             </LinearLayout>
 
@@ -69,7 +70,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="2dp">
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -109,7 +111,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
+
                     android:orientation="horizontal">>
 
                     <TextView
@@ -132,7 +134,7 @@
                         android:paddingTop="2dp"
                         android:paddingBottom="2dp"
                         android:background="@drawable/trendboxy"
-                        android:text="#veterans" />
+                        android:text="#hiking" />
 
                     <TextView
                         android:layout_width="wrap_content"
