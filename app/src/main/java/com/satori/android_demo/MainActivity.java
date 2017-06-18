@@ -239,6 +239,8 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
                             mTextView.setText("Entered hive #"+newTag);;
                             SubscriptionChangeMessage subChangeMessage = new SubscriptionChangeMessage(newTag, mLocation);
                             sendSubscriptionChangeMessageToService(subChangeMessage);
+                            sendMessageToService(new ChatMessage("Queen Bee", "User "+userName+" has joined.", mLocation, newTag));
+
                             if (newTag.equals("")){
                                 setTitle(("Hivestr").trim());
                             }
@@ -344,6 +346,12 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
                     String message = event.getData().getString("text");
                     String text = String.format("<b>&lt;%s&gt;</b> %s", nick, message);
                     activity.mTextView.setText(Html.fromHtml(text + "<br/>" + html), TextView.BufferType.EDITABLE);
+                    break;
+                }
+                case SatoriService.EVENT_RECEIVE_USER_COUNT: {
+                    int count = event.getData().getInt("count");
+                    String text = String.format("%s users in chat", count);
+                    //activity.mTextView.setText(Html.fromHtml(text + "<br/>" + html), TextView.BufferType.EDITABLE);
                     break;
                 }
                 case SatoriService.EVENT_USER_JOIN: {
