@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
     private boolean mIsBound;
     private TextView mTextView;
     private MenuItem mClientConnectivityState;
-    private String newTag;
+    private String newTag = "";
     private String newHiveName;
 
     Location mLocation;
