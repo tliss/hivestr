@@ -12,7 +12,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-        android:weightSum="1">
+            android:weightSum="1">
 
         <EditText
             android:id="@+id/message"
@@ -21,12 +21,17 @@
             android:inputType="text"
             android:background="@drawable/boxy"
             android:hint="Get buzzin!"
-            android:padding="10px"/>
+            android:padding="10dp"
+            android:layout_marginBottom="10dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#eded90">
+            android:background="#eded90"
+            android:bottomLeftRadius="5dp"
+            android:bottomRightRadius="5dp"
+            android:topLeftRadius="5dp"
+            android:topRightRadius="5dp">
             <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

@@ -322,8 +322,7 @@ public class SatoriService extends Service {
                 int idx = c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
                 return c.getString(idx);
             } else {
-                Random rand = new Random();
-                return "anon" + (rand.nextInt(999) + 1);
+                return "anonymous";
             }
         } finally {
             if (null != c) {

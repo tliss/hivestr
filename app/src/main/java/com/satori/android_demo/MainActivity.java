@@ -40,6 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
+import java.util.Random;
 
 
 /**
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
     private TextView mTextView;
     private MenuItem mClientConnectivityState;
     private String newTag = "";
-    private String newHiveName;
+    private String userName;
 
     Location mLocation;
     LocationManager mLocationManager;
@@ -138,6 +139,9 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Random rand = new Random();
+        userName = "anon" + (rand.nextInt(999) + 1);
+
         mTextView = (TextView) findViewById(R.id.chatHistory);
         EditText inputField = (EditText) findViewById(R.id.message);
         inputField.setOnEditorActionListener(new EditText.OnEditorActionListener() {
@@ -146,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
                 if ((keyEvent != null && (keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
                     CharSequence text = textView.getText();
 
-                    ChatMessage message = new ChatMessage("anonymous", text.toString(), mLocation, newTag);
+                    ChatMessage message = new ChatMessage(userName, text.toString(), mLocation, newTag);
                     sendMessageToService(message);
                     textView.setText("");
                 }
