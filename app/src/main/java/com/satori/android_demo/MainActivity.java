@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
         setContentView(R.layout.activity_main);
 
         Random rand = new Random();
-        userName = "anon" + (rand.nextInt(999) + 1);
+        userName = "bee" + (rand.nextInt(999) + 1);
 
         mTextView = (TextView) findViewById(R.id.chatHistory);
         EditText inputField = (EditText) findViewById(R.id.message);
@@ -345,19 +345,19 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
                 case SatoriService.EVENT_USER_JOIN: {
                     String nick = event.getData().getString("nick");
                     String text = String.format("<font color=#cc0000><i>User &lt;%s&gt; joined the channel</i></font>", nick);
-                    activity.mTextView.setText(Html.fromHtml(text + "<br/>" + html), TextView.BufferType.EDITABLE);
+                    //activity.mTextView.setText(Html.fromHtml(text + "<br/>" + html), TextView.BufferType.EDITABLE);
                     break;
                 }
                 case SatoriService.EVENT_USER_LEFT: {
                     String nick = event.getData().getString("nick");
                     String text = String.format("<font color=#cc0000><i>User &lt;%s&gt; left the channel</i></font>", nick);
-                    activity.mTextView.setText(Html.fromHtml(text + "<br/>" + html), TextView.BufferType.EDITABLE);
+                    //activity.mTextView.setText(Html.fromHtml(text + "<br/>" + html), TextView.BufferType.EDITABLE);
                     break;
                 }
                 case SatoriService.EVENT_INFO: {
                     String info = event.getData().getString("info");
                     String text = String.format("<font color=#a8a8a8 size=5><i>%s</i></font>", info);
-                    activity.mTextView.setText(Html.fromHtml(text + "<br/>" + html), TextView.BufferType.EDITABLE);
+                    //activity.mTextView.setText(Html.fromHtml(text + "<br/>" + html), TextView.BufferType.EDITABLE);
                     break;
                 }
                 case SatoriService.EVENT_CLIENT_STATE: {
@@ -373,7 +373,7 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
                         buffer.append(String.format("- endpoint: %s<br/>", endpoint));
                         buffer.append(String.format("- appkey: %s<br/>", appkey));
                         buffer.append("</font>");
-                        activity.mTextView.setText(Html.fromHtml(buffer.toString() + "<br/>" + html), TextView.BufferType.EDITABLE);
+                        //activity.mTextView.setText(Html.fromHtml(buffer.toString() + "<br/>" + html), TextView.BufferType.EDITABLE);
                         activity.mInitialized = true;
                     }
                     break;
