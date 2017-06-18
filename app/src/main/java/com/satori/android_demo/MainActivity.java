@@ -142,6 +142,9 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
         Random rand = new Random();
         userName = "bee" + (rand.nextInt(999) + 1);
 
+        TextView beeButton = (TextView) findViewById(R.id.beebutton);
+        beeButton.setText(new String(Character.toChars(0x1F41D)));
+
         mTextView = (TextView) findViewById(R.id.chatHistory);
         EditText inputField = (EditText) findViewById(R.id.message);
         inputField.setOnEditorActionListener(new EditText.OnEditorActionListener() {
