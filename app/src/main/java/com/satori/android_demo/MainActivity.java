@@ -215,7 +215,12 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
 
                             SubscriptionChangeMessage subChangeMessage = new SubscriptionChangeMessage(newTag, mLocation);
                             sendSubscriptionChangeMessageToService(subChangeMessage);
-                            setTitle("Hivestr #" + (newTag).toLowerCase());
+                            if (newTag.equals("")){
+                                setTitle(("Hivestr").trim());
+                            }
+                            else {
+                                setTitle(("Hivestr #" + (newTag).toLowerCase()).trim());
+                            }
                         }
                     }
             );
