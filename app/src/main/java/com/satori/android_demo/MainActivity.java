@@ -69,6 +69,34 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
     Location mLocation;
     LocationManager mLocationManager;
 
+    private final View.OnClickListener tagClickListener = new View.OnClickListener(){
+
+        @Override
+        public void onClick(View v) {
+            String text = ((TextView)v).getText().toString();
+            text = text.replace("#","");
+            newTag = text;
+            mTextView.setText("Entered hive #"+newTag);;
+            SubscriptionChangeMessage subChangeMessage = new SubscriptionChangeMessage(newTag, mLocation);
+            sendSubscriptionChangeMessageToService(subChangeMessage);
+
+            final Runnable r = new Runnable() {
+                public void run() {
+                    sendMessageToService(new ChatMessage("Queen Bee", "User "+userName+" has joined.", mLocation, newTag));
+                }
+            };
+            Handler handler = new Handler();
+            handler.postDelayed(r, 1000);
+
+            if (newTag.equals("")){
+                setTitle(("Hivestr").trim());
+            }
+            else {
+                setTitle(("Hivestr #" + (newTag).toLowerCase()).trim());
+            }
+        }
+    };
+
     private final LocationListener mLocationListener = new LocationListener() {
 
         @Override
@@ -146,17 +174,33 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
         Random rand = new Random();
         userName = "bee" + (rand.nextInt(999) + 1);
 
-
-
+        TextView tag1 = (TextView) findViewById(R.id.angelHackTag);
+        tag1.setOnClickListener(tagClickListener);
+        TextView tag2 = (TextView) findViewById(R.id.veteransTag);
+        tag2.setOnClickListener(tagClickListener);
+        TextView tag3 = (TextView) findViewById(R.id.prideDayTag);
+        tag3.setOnClickListener(tagClickListener);
+        TextView tag4 = (TextView) findViewById(R.id.hikingTag);
+        tag4.setOnClickListener(tagClickListener);
+        TextView tag5 = (TextView) findViewById(R.id.switchTag);
+        tag5.setOnClickListener(tagClickListener);
+        TextView tag6 = (TextView) findViewById(R.id.singlesTag);
+        tag6.setOnClickListener(tagClickListener);
         //Intent intent = new Intent(this, MainActivity.class);
         //startActivity(intent);
         //finish();
 
-
-
         TextView beeButton = (TextView) findViewById(R.id.beebutton);
         countTxt = (TextView) findViewById(R.id.num_txt);
         beeButton.setText(new String(Character.toChars(0x1F41D)));
+        beeButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                ChatMessage message = new ChatMessage(userName, new String(Character.toChars(0x1F41D)), mLocation, newTag);
+                sendMessageToService(message);
+            }
+        });
         //beeButton.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
         mTextView = (TextView) findViewById(R.id.chatHistory);
 
