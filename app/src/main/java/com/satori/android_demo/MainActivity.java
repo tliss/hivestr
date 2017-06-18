@@ -21,6 +21,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.text.style.SubscriptSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -210,6 +211,9 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
                         public void onClick(DialogInterface dialog, int which) {
                             //Toast.makeText(getApplicationContext(), "Sup", Toast.LENGTH_SHORT).show();
                             newTag = input.getText().toString();
+
+                            SubscriptionChangeMessage subChangeMessage = new SubscriptionChangeMessage(newTag, mLocation);
+                            sendSubscriptionChangeMessageToService(subChangeMessage);
                         }
                     }
             );
@@ -230,6 +234,21 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
                     msg.replyTo = mIncomingMessenger;
                     mService.send(msg);
                 } catch (RemoteException e) {
+
+                }
+            }
+        }
+    }
+
+    private void sendSubscriptionChangeMessageToService(SubscriptionChangeMessage subChangeMessage){
+        if(mIsBound){
+            if(mService != null){
+                try{
+                    Message msg = Message.obtain(null, SatoriService.EVENT_CHANGE_SUBSCRIPTION, 0, 0, subChangeMessage);
+                    msg.replyTo = mIncomingMessenger;
+                    mService.send(msg);
+                }catch(RemoteException e){
+
                 }
             }
         }
