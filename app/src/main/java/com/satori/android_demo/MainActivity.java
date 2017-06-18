@@ -31,6 +31,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -61,7 +64,8 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
     private MenuItem mClientConnectivityState;
     private String newTag = "";
     private String userName;
-
+    private EditText msgField;
+    private TextView countTxt;
     Location mLocation;
     LocationManager mLocationManager;
 
@@ -144,10 +148,13 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
         userName = "bee" + (rand.nextInt(999) + 1);
 
         TextView beeButton = (TextView) findViewById(R.id.beebutton);
+        countTxt = (TextView) findViewById(R.id.num_txt);
         beeButton.setText(new String(Character.toChars(0x1F41D)));
         //beeButton.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
         mTextView = (TextView) findViewById(R.id.chatHistory);
+
         EditText inputField = (EditText) findViewById(R.id.message);
+        msgField = inputField;
         inputField.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
@@ -239,7 +246,14 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
                             mTextView.setText("Entered hive #"+newTag);;
                             SubscriptionChangeMessage subChangeMessage = new SubscriptionChangeMessage(newTag, mLocation);
                             sendSubscriptionChangeMessageToService(subChangeMessage);
-                            sendMessageToService(new ChatMessage("Queen Bee", "User "+userName+" has joined.", mLocation, newTag));
+
+                            final Runnable r = new Runnable() {
+                                public void run() {
+                                    sendMessageToService(new ChatMessage("Queen Bee", "User "+userName+" has joined.", mLocation, newTag));
+                                }
+                            };
+                            Handler handler = new Handler();
+                            handler.postDelayed(r, 1000);
 
                             if (newTag.equals("")){
                                 setTitle(("Hivestr").trim());
@@ -350,7 +364,14 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
                 }
                 case SatoriService.EVENT_RECEIVE_USER_COUNT: {
                     int count = event.getData().getInt("count");
-                    String text = String.format("%s users in chat", count);
+//                    String text = String.format("%s users in chat", count);
+//                    final Animation animation = new AlphaAnimation(1, 0); // Change alpha from fully visible to invisible
+//                    animation.setDuration(500); // duration - half a second
+//                    animation.setInterpolator(new LinearInterpolator()); // do not alter animation rate
+//                    animation.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
+//                    animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in
+//                    activity.countTxt.setAnimation(animation);
+                    activity.countTxt.setText(count);
                     //activity.mTextView.setText(Html.fromHtml(text + "<br/>" + html), TextView.BufferType.EDITABLE);
                     break;
                 }

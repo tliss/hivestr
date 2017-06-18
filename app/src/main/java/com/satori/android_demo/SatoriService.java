@@ -494,7 +494,7 @@ public class SatoriService extends Service {
             });
             userFilterString = userFilterString + " GROUP BY user";
             userNumberConfig.setFilter(userFilterString);
-            userNumberConfig.setPeriod(60);
+            //userNumberConfig.setPeriod(60);
 
             mRtmClient.createSubscription("user_count", userNumberConfig);
         }
