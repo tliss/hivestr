@@ -228,6 +228,7 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
                             //Toast.makeText(getApplicationContext(), "Sup", Toast.LENGTH_SHORT).show();
                             newTag = input.getText().toString();
 
+                            mTextView.setText("Entered hive #"+newTag);;
                             SubscriptionChangeMessage subChangeMessage = new SubscriptionChangeMessage(newTag, mLocation);
                             sendSubscriptionChangeMessageToService(subChangeMessage);
                             if (newTag.equals("")){

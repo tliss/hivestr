@@ -12,6 +12,7 @@ public class SubscriptionChangeMessage {
     public String tag;
     public double lat;
     public double lon;
+    public boolean showChannelUpdate;
 
     public SubscriptionChangeMessage(String tag, Location loc){
         this.tag = tag;

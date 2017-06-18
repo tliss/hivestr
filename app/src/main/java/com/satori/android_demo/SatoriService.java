@@ -179,12 +179,12 @@ public class SatoriService extends Service {
         client.createSubscription(messageChannelName, SubscriptionMode.SIMPLE, new SubscriptionAdapter() {
             @Override
             public void onEnterSubscribed(SubscribeRequest request, SubscribeReply reply) {
-                sendEventToUI(buildEventInfo("RTM client is subscribed to " + reply.getSubscriptionId()));
+                //sendEventToUI(buildEventInfo("RTM client is subscribed to " + reply.getSubscriptionId()));
             }
 
             @Override
             public void onLeaveSubscribed(SubscribeRequest request, SubscribeReply reply) {
-                sendEventToUI(buildEventInfo("RTM client is unsubscribed from " + reply.getSubscriptionId()));
+                //sendEventToUI(buildEventInfo("RTM client is unsubscribed from " + reply.getSubscriptionId()));
             }
 
             @Override
@@ -208,12 +208,12 @@ public class SatoriService extends Service {
 
         client.createSubscription(presenceChannelName, SubscriptionMode.SIMPLE, new SubscriptionAdapter() {
             public void onEnterSubscribed(SubscribeRequest request, SubscribeReply reply) {
-                sendEventToUI(buildEventInfo("RTM client is subscribed to " + reply.getSubscriptionId()));
+                //sendEventToUI(buildEventInfo("RTM client is subscribed to " + reply.getSubscriptionId()));
             }
 
             @Override
             public void onLeaveSubscribed(SubscribeRequest request, SubscribeReply reply) {
-                sendEventToUI(buildEventInfo("RTM client is unsubscribed from " + reply.getSubscriptionId()));
+                //sendEventToUI(buildEventInfo("RTM client is unsubscribed from " + reply.getSubscriptionId()));
             }
 
             @Override
@@ -403,12 +403,12 @@ public class SatoriService extends Service {
             SubscriptionConfig config = new SubscriptionConfig(SubscriptionMode.SIMPLE, new SubscriptionAdapter() {
                 @Override
                 public void onEnterSubscribed(SubscribeRequest request, SubscribeReply reply) {
-                    sendEventToUI(buildEventInfo("RTM client is subscribed to " + reply.getSubscriptionId()));
+                 //   sendEventToUI(buildEventInfo("RTM client is subscribed to " + reply.getSubscriptionId()));
                 }
 
                 @Override
                 public void onLeaveSubscribed(SubscribeRequest request, SubscribeReply reply) {
-                    sendEventToUI(buildEventInfo("RTM client is unsubscribed from " + reply.getSubscriptionId()));
+                  //  sendEventToUI(buildEventInfo("RTM client is unsubscribed from " + reply.getSubscriptionId()));
                 }
 
                 @Override
@@ -446,14 +446,14 @@ public class SatoriService extends Service {
     private String getLocationFilterString(double lat, double lon){
         double latitude = lat;
         double longitude = lon;
-
+        double range = 50;
         double r_earth = 6371000.00;
 
-        double latTR  = latitude + (500 / r_earth) * (180 / Math.PI);
-        double lonTR = longitude + (500 / r_earth ) * (180 / Math.PI) / Math.cos(latitude * Math.PI/180);
+        double latTR  = latitude + (range / r_earth) * (180 / Math.PI);
+        double lonTR = longitude + (range / r_earth ) * (180 / Math.PI) / Math.cos(latitude * Math.PI/180);
 
-        double latBL = latitude - (500 / r_earth) * (180 / Math.PI);
-        double lonBL = longitude - (500 / r_earth ) * (180 / Math.PI) / Math.cos(latitude * Math.PI/180);
+        double latBL = latitude - (range / r_earth) * (180 / Math.PI);
+        double lonBL = longitude - (range / r_earth ) * (180 / Math.PI) / Math.cos(latitude * Math.PI/180);
         String filterString = "lat > "+Double.toString(latBL)+ " AND lat < "+Double.toString(latTR) + " AND lon > " + Double.toString(lonBL) + "AND lon < "+Double.toString(lonTR);
 
         return filterString;
