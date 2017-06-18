@@ -133,7 +133,6 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
         mInitialized = savedInstanceState.getBoolean("initialized");
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +141,14 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
 
         Random rand = new Random();
         userName = "bee" + (rand.nextInt(999) + 1);
+
+
+
+        //Intent intent = new Intent(this, MainActivity.class);
+        //startActivity(intent);
+        //finish();
+
+
 
         TextView beeButton = (TextView) findViewById(R.id.beebutton);
         beeButton.setText(new String(Character.toChars(0x1F41D)));
@@ -239,6 +246,8 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
                             mTextView.setText("Entered hive #"+newTag);;
                             SubscriptionChangeMessage subChangeMessage = new SubscriptionChangeMessage(newTag, mLocation);
                             sendSubscriptionChangeMessageToService(subChangeMessage);
+                            sendMessageToService(new ChatMessage("Queen Bee", "User "+userName+" has joined.", mLocation, newTag));
+
                             if (newTag.equals("")){
                                 setTitle(("Hivestr").trim());
                             }
@@ -344,6 +353,12 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
                     String message = event.getData().getString("text");
                     String text = String.format("<b>&lt;%s&gt;</b> %s", nick, message);
                     activity.mTextView.setText(Html.fromHtml(text + "<br/>" + html), TextView.BufferType.EDITABLE);
+                    break;
+                }
+                case SatoriService.EVENT_RECEIVE_USER_COUNT: {
+                    int count = event.getData().getInt("count");
+                    String text = String.format("%s users in chat", count);
+                    //activity.mTextView.setText(Html.fromHtml(text + "<br/>" + html), TextView.BufferType.EDITABLE);
                     break;
                 }
                 case SatoriService.EVENT_USER_JOIN: {
