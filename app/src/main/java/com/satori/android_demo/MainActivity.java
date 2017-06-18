@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
         @Override
         public void onLocationChanged(final Location location) {
             mLocation = location;
+            SubscriptionChangeMessage scm = new SubscriptionChangeMessage(newTag, mLocation);
+            sendSubscriptionChangeMessageToService(scm);
             Log.i(TAG, "Location: "+location.toString());
         }
 
@@ -155,11 +157,20 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
     @TargetApi(Build.VERSION_CODES.N)
     private void updateLocation(){
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
         mLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+    }
 
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, mLocationListener);
+    @Override
+    protected void onResume(){
+        super.onResume();
+        mLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, mLocationListener);
+    }
 
+    @Override
+    protected void onPause(){
+        super.onPause();
+        mLocationManager.removeUpdates(mLocationListener);
     }
 
     @Override

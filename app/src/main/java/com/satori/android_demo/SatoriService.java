@@ -3,6 +3,7 @@ package com.satori.android_demo;
 import android.app.Service;
 import android.content.Intent;
 import android.database.Cursor;
+import android.location.Location;
 import android.os.*;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -395,7 +396,7 @@ public class SatoriService extends Service {
             filterString = "SELECT * FROM chat WHERE tag=\""+message.tag+"\"";
         }
 
-        if(filterString != ""){
+        if(!filterString.equals("")){
 
             mRtmClient.removeSubscription("chat");
             SubscriptionConfig config = new SubscriptionConfig(SubscriptionMode.SIMPLE, new SubscriptionAdapter() {
@@ -428,10 +429,33 @@ public class SatoriService extends Service {
                 }
             });
 
+
+            if(!filterString.equals("")){
+                filterString = filterString + " AND " + getLocationFilterString(message.lat, message.lon);
+            }else{
+                filterString = "WHERE "+getLocationFilterString(message.lat, message.lon);
+            }
+
             config.setFilter(filterString);
 
             mRtmClient.createSubscription("chat", config);
         }
+    }
+
+    private String getLocationFilterString(double lat, double lon){
+        double latitude = lat;
+        double longitude = lon;
+
+        double r_earth = 6371000.00;
+
+        double latTR  = latitude + (500 / r_earth) * (180 / Math.PI);
+        double lonTR = longitude + (500 / r_earth ) * (180 / Math.PI) / Math.cos(latitude * Math.PI/180);
+
+        double latBL = latitude - (500 / r_earth) * (180 / Math.PI);
+        double lonBL = longitude - (500 / r_earth ) * (180 / Math.PI) / Math.cos(latitude * Math.PI/180);
+        String filterString = "lat > "+Double.toString(latBL)+ " AND lat < "+Double.toString(latTR) + " AND lon > " + Double.toString(lonBL) + "AND lon < "+Double.toString(lonTR);
+
+        return filterString;
     }
 
 }
