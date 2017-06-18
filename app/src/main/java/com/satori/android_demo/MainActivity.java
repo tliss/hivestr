@@ -133,7 +133,6 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
         mInitialized = savedInstanceState.getBoolean("initialized");
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +141,14 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
 
         Random rand = new Random();
         userName = "bee" + (rand.nextInt(999) + 1);
+
+
+
+        //Intent intent = new Intent(this, MainActivity.class);
+        //startActivity(intent);
+        //finish();
+
+
 
         TextView beeButton = (TextView) findViewById(R.id.beebutton);
         beeButton.setText(new String(Character.toChars(0x1F41D)));
