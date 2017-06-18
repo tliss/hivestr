@@ -27,7 +27,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#eded90">
+            android:background="@drawable/chatboxy">
             <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
