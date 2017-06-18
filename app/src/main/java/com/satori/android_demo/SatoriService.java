@@ -55,6 +55,7 @@ public class SatoriService extends Service {
     static final int EVENT_INFO = 7;
     static final int EVENT_CLIENT_STATE = 8;
     static final int EVENT_CHANGE_SUBSCRIPTION = 10;
+    static final int EVENT_RECEIVE_USER_COUNT = 11;
 
     private static final int PRESENCE_INTERVAL_MS = 5000;
     private static final int OFFLINE_USER_THRESHOLD_MS = (PRESENCE_INTERVAL_MS * 3);
@@ -257,6 +258,15 @@ public class SatoriService extends Service {
         return msg;
     }
 
+    private Message buildEventNewCount(int count) {
+        Bundle b = new Bundle();
+        b.putInt("count", count);
+        Message msg = Message.obtain(null, EVENT_RECEIVE_USER_COUNT);
+        msg.setData(b);
+        Log.i(TAG, "Send to UI [count] " + count);
+        return msg;
+    }
+
     private Message buildEventClientState() {
         return buildEventClientState(null != mRtmClient && mRtmClient.isConnected());
     }
@@ -392,13 +402,22 @@ public class SatoriService extends Service {
     private void setSubscription(SubscriptionChangeMessage message){
 
         String filterString = "";
+        String userFilterString = "";
         if(message.tag != null){
             filterString = "SELECT * FROM chat WHERE tag=\""+message.tag+"\"";
+            userFilterString = "SELECT COUNT(*) as count FROM chat WHERE tag=\""+message.tag+"\"";
+
         }
 
         if(!filterString.equals("")){
-
             mRtmClient.removeSubscription("chat");
+
+            try{
+                mRtmClient.removeSubscription("user_count");
+            }catch(Exception e){
+                // eat it for now
+            }
+
             SubscriptionConfig config = new SubscriptionConfig(SubscriptionMode.SIMPLE, new SubscriptionAdapter() {
                 @Override
                 public void onEnterSubscribed(SubscribeRequest request, SubscribeReply reply) {
@@ -432,13 +451,52 @@ public class SatoriService extends Service {
 
             if(!filterString.equals("")){
                 filterString = filterString + " AND " + getLocationFilterString(message.lat, message.lon);
+                userFilterString = userFilterString + " AND "+ getLocationFilterString(message.lat, message.lon);
             }else{
-                filterString = "WHERE "+getLocationFilterString(message.lat, message.lon);
+                filterString = "SELECT * from chat WHERE "+getLocationFilterString(message.lat, message.lon);
+                userFilterString = "SELECT COUNT(*) as count FROM chat WHERE "+getLocationFilterString(message.lat, message.lon);
+
             }
 
             config.setFilter(filterString);
 
             mRtmClient.createSubscription("chat", config);
+
+            SubscriptionConfig userNumberConfig = new SubscriptionConfig(SubscriptionMode.SIMPLE, new SubscriptionAdapter() {
+                @Override
+                public void onEnterSubscribed(SubscribeRequest request, SubscribeReply reply) {
+                    //   sendEventToUI(buildEventInfo("RTM client is subscribed to " + reply.getSubscriptionId()));
+                }
+
+                @Override
+                public void onLeaveSubscribed(SubscribeRequest request, SubscribeReply reply) {
+                    //  sendEventToUI(buildEventInfo("RTM client is unsubscribed from " + reply.getSubscriptionId()));
+                }
+
+                @Override
+                public void onSubscriptionData(SubscriptionData subscriptionData) {
+                    for (AnyJson json : subscriptionData.getMessages()) {
+                        try {
+                            CountMessage countMsg = json.convertToType(CountMessage.class);
+                            sendEventToUI(buildEventNewCount(countMsg.count));
+
+                        } catch (Exception ex) {
+                            Log.e(TAG, "Received malformed message: " + json, ex);
+                        }
+                    }
+                }
+
+                @Override
+                public void onSubscriptionError(SubscriptionError error) {
+                    String msg = String.format("RTM subscription failed: %s (%s)", error.getError(), error.getReason());
+                    sendEventToUI(buildEventInfo(msg));
+                }
+            });
+            userFilterString = userFilterString + " GROUP BY user";
+            userNumberConfig.setFilter(userFilterString);
+            userNumberConfig.setPeriod(60);
+
+            mRtmClient.createSubscription("user_count", userNumberConfig);
         }
     }
 

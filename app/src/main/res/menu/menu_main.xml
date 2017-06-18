@@ -10,4 +10,5 @@
         android:icon="@drawable/disconnected_white"
         android:title="@string/action_settings"
         app:showAsAction="always"/>
+
 </menu>
