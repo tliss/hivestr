@@ -143,39 +143,7 @@ public class SatoriService extends Service {
                 .build();
 
         client.start();
-        SubscriptionConfig config = new SubscriptionConfig(SubscriptionMode.SIMPLE, new SubscriptionAdapter() {
-            @Override
-            public void onEnterSubscribed(SubscribeRequest request, SubscribeReply reply) {
-                sendEventToUI(buildEventInfo("RTM client is subscribed to " + reply.getSubscriptionId()));
-            }
-
-            @Override
-            public void onLeaveSubscribed(SubscribeRequest request, SubscribeReply reply) {
-                sendEventToUI(buildEventInfo("RTM client is unsubscribed from " + reply.getSubscriptionId()));
-            }
-
-            @Override
-            public void onSubscriptionData(SubscriptionData subscriptionData) {
-                for (AnyJson json : subscriptionData.getMessages()) {
-                    try {
-                        ChatMessage msg = json.convertToType(ChatMessage.class);
-                        sendEventToUI(buildEventNewChatMessage(msg.user, msg.text));
-                    } catch (Exception ex) {
-                        Log.e(TAG, "Received malformed message: " + json, ex);
-                    }
-                }
-            }
-
-            @Override
-            public void onSubscriptionError(SubscriptionError error) {
-                String msg = String.format("RTM subscription failed: %s (%s)", error.getError(), error.getReason());
-                sendEventToUI(buildEventInfo(msg));
-            }
-        });
-
-        config.setFilter("SELECT * FROM chat WHERE lat is not null and lon is not null");
-        client.createSubscription(messageChannelName, config);
-//        client.createSubscription(messageChannelName, SubscriptionMode.SIMPLE, new SubscriptionAdapter() {
+//        SubscriptionConfig config = new SubscriptionConfig(SubscriptionMode.SIMPLE, new SubscriptionAdapter() {
 //            @Override
 //            public void onEnterSubscribed(SubscribeRequest request, SubscribeReply reply) {
 //                sendEventToUI(buildEventInfo("RTM client is subscribed to " + reply.getSubscriptionId()));
@@ -205,6 +173,38 @@ public class SatoriService extends Service {
 //            }
 //        });
 //
+//        config.setFilter("SELECT * FROM chat WHERE lat is not null and lon is not null");
+//        client.createSubscription(messageChannelName, config);
+        client.createSubscription(messageChannelName, SubscriptionMode.SIMPLE, new SubscriptionAdapter() {
+            @Override
+            public void onEnterSubscribed(SubscribeRequest request, SubscribeReply reply) {
+                sendEventToUI(buildEventInfo("RTM client is subscribed to " + reply.getSubscriptionId()));
+            }
+
+            @Override
+            public void onLeaveSubscribed(SubscribeRequest request, SubscribeReply reply) {
+                sendEventToUI(buildEventInfo("RTM client is unsubscribed from " + reply.getSubscriptionId()));
+            }
+
+            @Override
+            public void onSubscriptionData(SubscriptionData subscriptionData) {
+                for (AnyJson json : subscriptionData.getMessages()) {
+                    try {
+                        ChatMessage msg = json.convertToType(ChatMessage.class);
+                        sendEventToUI(buildEventNewChatMessage(msg.user, msg.text));
+                    } catch (Exception ex) {
+                        Log.e(TAG, "Received malformed message: " + json, ex);
+                    }
+                }
+            }
+
+            @Override
+            public void onSubscriptionError(SubscriptionError error) {
+                String msg = String.format("RTM subscription failed: %s (%s)", error.getError(), error.getReason());
+                sendEventToUI(buildEventInfo(msg));
+            }
+        });
+
         client.createSubscription(presenceChannelName, SubscriptionMode.SIMPLE, new SubscriptionAdapter() {
             public void onEnterSubscribed(SubscribeRequest request, SubscribeReply reply) {
                 sendEventToUI(buildEventInfo("RTM client is subscribed to " + reply.getSubscriptionId()));
