@@ -21,7 +21,8 @@
             android:inputType="text"
             android:background="@drawable/boxy"
             android:hint="Get buzzin!"
-            android:padding="10px"/>
+            android:padding="10dp"
+            android:layout_marginBottom="10dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
