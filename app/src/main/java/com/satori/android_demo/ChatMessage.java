@@ -9,8 +9,8 @@ import android.location.Location;
 public class ChatMessage {
     String user;
     String text;
-    String lat;
-    String lon;
+    double lat;
+    double lon;
     String tag;
 
     ChatMessage() {
@@ -25,8 +25,8 @@ public class ChatMessage {
         this.user = user;
         this.text = text;
         if(loc != null) {
-            this.lat = Double.toString(loc.getLatitude());
-            this.lon = Double.toString(loc.getLongitude());
+            this.lat = loc.getLatitude();
+            this.lon = loc.getLongitude();
         }
         this.tag = tag;
     }
