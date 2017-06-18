@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
     private TextView mTextView;
     private MenuItem mClientConnectivityState;
     private String newTag;
+    private String newHiveName;
 
     Location mLocation;
     LocationManager mLocationManager;
@@ -214,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
 
                             SubscriptionChangeMessage subChangeMessage = new SubscriptionChangeMessage(newTag, mLocation);
                             sendSubscriptionChangeMessageToService(subChangeMessage);
+                            setTitle("Hivestr #" + (newTag).toLowerCase());
                         }
                     }
             );
