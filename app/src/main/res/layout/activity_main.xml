@@ -11,8 +11,7 @@
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:weightSum="1">
+            android:layout_height="match_parent">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -33,13 +32,53 @@
 
             <TextView
                 android:id="@+id/beebutton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:textSize="32sp"
+                android:paddingEnd="10dp"
                 android:layout_weight="1"/>
 
         </LinearLayout>
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trending Hives:"
+                android:textStyle="bold"
+                android:padding="3sp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="5dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="#veterans"
+                android:padding="3sp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/trendboxy"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="#gamers"
+                android:padding="3sp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/trendboxy"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="#muslimfriends"
+                android:padding="3sp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/trendboxy"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

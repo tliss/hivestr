@@ -38,6 +38,7 @@ import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import java.lang.ref.WeakReference;
 import java.util.Random;
@@ -144,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
 
         TextView beeButton = (TextView) findViewById(R.id.beebutton);
         beeButton.setText(new String(Character.toChars(0x1F41D)));
-
+        //beeButton.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
         mTextView = (TextView) findViewById(R.id.chatHistory);
         EditText inputField = (EditText) findViewById(R.id.message);
         inputField.setOnEditorActionListener(new EditText.OnEditorActionListener() {
