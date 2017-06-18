@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
     private TextView mTextView;
     private MenuItem mClientConnectivityState;
     private String newTag;
+    private String newHiveName;
 
     Location mLocation;
     LocationManager mLocationManager;
@@ -210,6 +211,7 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
                         public void onClick(DialogInterface dialog, int which) {
                             //Toast.makeText(getApplicationContext(), "Sup", Toast.LENGTH_SHORT).show();
                             newTag = input.getText().toString();
+                            setTitle("Hivestr #" + newTag);
                         }
                     }
             );
