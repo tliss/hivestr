@@ -378,7 +378,7 @@ public class MainActivity extends AppCompatActivity implements View.OnCreateCont
 //                    animation.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
 //                    animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in
 //                    activity.countTxt.setAnimation(animation);
-                    activity.countTxt.setText(count);
+                   // activity.countTxt.setText(""+count);
                     //activity.mTextView.setText(Html.fromHtml(text + "<br/>" + html), TextView.BufferType.EDITABLE);
                     break;
                 }
