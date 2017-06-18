@@ -18,17 +18,27 @@
             android:id="@+id/message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:inputType="text"
+            android:background="@drawable/boxy"
+            android:hint="Get buzzin!"
+            android:padding="10px"/>
 
-        <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/scrollView" android:layout_gravity="center_horizontal">
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:freezesText="true"
-                    android:id="@+id/chatHistory"/>
-        </ScrollView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#eded90">
+            <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/scrollView"
+                    android:layout_gravity="center_horizontal">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:freezesText="true"
+                        android:id="@+id/chatHistory"
+                        android:padding="20px" />
+            </ScrollView>
+        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
