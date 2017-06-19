@@ -3,8 +3,13 @@ package com.satori.android_demo;
 import android.app.Service;
 import android.content.Intent;
 import android.database.Cursor;
-import android.location.Location;
-import android.os.*;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.provider.ContactsContract;
 import android.util.Log;
 
@@ -14,19 +19,21 @@ import com.satori.rtm.RtmClientAdapter;
 import com.satori.rtm.RtmClientBuilder;
 import com.satori.rtm.SubscriptionAdapter;
 import com.satori.rtm.SubscriptionConfig;
-import com.satori.rtm.SubscriptionListener;
 import com.satori.rtm.SubscriptionMode;
 import com.satori.rtm.model.AnyJson;
 import com.satori.rtm.model.SubscribeReply;
 import com.satori.rtm.model.SubscribeRequest;
 import com.satori.rtm.model.SubscriptionData;
 import com.satori.rtm.model.SubscriptionError;
-import com.satori.rtm.model.SubscriptionInfo;
-import com.satori.rtm.model.UnsubscribeReply;
-import com.satori.rtm.model.UnsubscribeRequest;
 
 import java.lang.ref.WeakReference;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Service for interaction with Satori RTM.
@@ -145,38 +152,6 @@ public class SatoriService extends Service {
                 .build();
 
         client.start();
-//        SubscriptionConfig config = new SubscriptionConfig(SubscriptionMode.SIMPLE, new SubscriptionAdapter() {
-//            @Override
-//            public void onEnterSubscribed(SubscribeRequest request, SubscribeReply reply) {
-//                sendEventToUI(buildEventInfo("RTM client is subscribed to " + reply.getSubscriptionId()));
-//            }
-//
-//            @Override
-//            public void onLeaveSubscribed(SubscribeRequest request, SubscribeReply reply) {
-//                sendEventToUI(buildEventInfo("RTM client is unsubscribed from " + reply.getSubscriptionId()));
-//            }
-//
-//            @Override
-//            public void onSubscriptionData(SubscriptionData subscriptionData) {
-//                for (AnyJson json : subscriptionData.getMessages()) {
-//                    try {
-//                        ChatMessage msg = json.convertToType(ChatMessage.class);
-//                        sendEventToUI(buildEventNewChatMessage(msg.user, msg.text));
-//                    } catch (Exception ex) {
-//                        Log.e(TAG, "Received malformed message: " + json, ex);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onSubscriptionError(SubscriptionError error) {
-//                String msg = String.format("RTM subscription failed: %s (%s)", error.getError(), error.getReason());
-//                sendEventToUI(buildEventInfo(msg));
-//            }
-//        });
-//
-//        config.setFilter("SELECT * FROM chat WHERE lat is not null and lon is not null");
-//        client.createSubscription(messageChannelName, config);
         client.createSubscription(messageChannelName, SubscriptionMode.SIMPLE, new SubscriptionAdapter() {
             @Override
             public void onEnterSubscribed(SubscribeRequest request, SubscribeReply reply) {
@@ -459,6 +434,7 @@ public class SatoriService extends Service {
             }
 
             config.setFilter(filterString);
+            config.setAge(60);
 
             mRtmClient.createSubscription("chat", config);
 
